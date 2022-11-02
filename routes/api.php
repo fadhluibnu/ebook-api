@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\HeloController;
 use App\Http\Controllers\SiswaController;
@@ -25,9 +27,21 @@ use Illuminate\Support\Facades\Route;
 Route::get("halo", function () {
     return ["me" => "Ganteng"];
 });
-
-// contoh menggunakan controller
-// Route::get("halocontroller", [HeloController::class, "index"]);
 Route::resource('halocontroller', HeloController::class);
 Route::resource("siswa", SiswaController::class);
-Route::resource("books", BookController::class);
+
+// public route
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/books', [BookController::class, 'index']);
+Route::get('/books/{id}', [BookController::class, 'show']);
+Route::get('/authors', [AuthorController::class, 'index']);
+Route::get('/authors/{id}', [AuthorController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource("books", BookController::class);
+    Route::resource("books", AuthorController::class);
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
