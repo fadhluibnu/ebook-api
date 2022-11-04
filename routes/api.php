@@ -41,7 +41,7 @@ Route::get('/authors', [AuthorController::class, 'index']);
 Route::get('/authors/{id}', [AuthorController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::resource("books", BookController::class);
-    Route::resource("books", AuthorController::class);
+    Route::resource("/books", BookController::class)->except("index", "show");
+    Route::resource("/authors", AuthorController::class)->except("index", "show");
     Route::post('/logout', [AuthController::class, 'logout']);
 });
